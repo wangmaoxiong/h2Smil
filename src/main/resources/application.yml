@@ -1,0 +1,13 @@
+spring:
+#数据源配置
+  datasource:
+    username: nasa
+    password: 123456
+    url: jdbc:h2:~/test1 #数据库默认在当前用户目录下，数据库不存在时会自动新建
+    driver-class-name: org.h2.Driver
+
+#JPA配置
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
