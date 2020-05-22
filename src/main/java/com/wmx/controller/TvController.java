@@ -15,10 +15,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
+ * @author wangmaoxiong
  * Created by Administrator on 2019/4/27.
  */
 @Controller
-public class TVController {
+public class TvController {
     @Resource
     private TVService tvService;
 
