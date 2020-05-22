@@ -23,7 +23,13 @@ public class TvController {
     @Resource
     private TVService tvService;
 
-    @GetMapping("findAll1")
+    /**
+     * http://localhost:8080/tv/findAll1
+     * @param name
+     * @return
+     * @throws ParseException
+     */
+    @GetMapping("tv/findAll1")
     @ResponseBody
     public String findAll1(String name) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -32,7 +38,14 @@ public class TvController {
         return tvService.findAll(start, end, name).toString();
     }
 
-    @GetMapping("findAll2")
+    /**
+     * http://localhost:8080/tv/findAll2
+     * @param page
+     * @param size
+     * @return
+     * @throws ParseException
+     */
+    @GetMapping("tv/findAll2")
     @ResponseBody
     public String findAll2(Integer page, Integer size) throws ParseException {
         page = page == null ? 1 : page;
