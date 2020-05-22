@@ -7,23 +7,37 @@ import javax.persistence.Id;
 import java.util.Date;
 
 /**
+ * @author wangmaoxiong
  * Created by Administrator on 2019/2/27 0027.
  * 电视机实体。应用启动时自动，配置文件中配置 ddl-auto: update：如果数据库不存在，则自动新建，否则不再新建。
  */
 @Entity
-public class TV {
-    @Id//标识为主键
-    @GeneratedValue(strategy = GenerationType.AUTO)//指定主键生成的方式，AUTO 指定 H2 数据库主键自动增长
-    private Integer tvId;//电视id，主键
+public class Tv {
+    /**
+     * 标识为主键
+     * 指定主键生成的方式，AUTO 指定 H2 数据库主键自动增长
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer tvId;
 
     /**
      * 下面没标识的属性都会以默认值和数据库表的字段进行映射对应
      * 如果修改默认值，又不属性的，可以参考：https://blog.csdn.net/wangmx1993328/article/details/82048775
      * 中的 "domain Area" 部分
      */
-    private String tvName;//电视名称
-    private Float tvPrice;//电视价格
-    private Date dateOfProduction;//生产日期
+    /**
+     * 电视名称
+     */
+    private String tvName;
+    /**
+     * 电视价格
+     */
+    private Float tvPrice;
+    /**
+     * 生产日期
+     */
+    private Date dateOfProduction;
 
     public Date getDateOfProduction() {
         return dateOfProduction;
@@ -59,7 +73,7 @@ public class TV {
 
     @Override
     public String toString() {
-        return "TV{" +
+        return "Tv{" +
                 "tvId=" + tvId +
                 ", tvName='" + tvName + '\'' +
                 ", tvPrice=" + tvPrice +

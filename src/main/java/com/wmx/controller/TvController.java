@@ -1,7 +1,7 @@
 package com.wmx.controller;
 
-import com.wmx.entity.TV;
-import com.wmx.service.TVService;
+import com.wmx.entity.Tv;
+import com.wmx.service.TvService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +21,11 @@ import java.util.logging.Logger;
 @Controller
 public class TvController {
     @Resource
-    private TVService tvService;
+    private TvService tvService;
 
     /**
      * http://localhost:8080/tv/findAll1
+     *
      * @param name
      * @return
      * @throws ParseException
@@ -40,6 +41,7 @@ public class TvController {
 
     /**
      * http://localhost:8080/tv/findAll2
+     *
      * @param page
      * @param size
      * @return
@@ -52,24 +54,25 @@ public class TvController {
         size = size == null ? 2 : size;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date start = dateFormat.parse("2019-04-28 08:00:00");
-        Page<TV> tvPage = tvService.findAll(start, page, size);
+        Page<Tv> tvPage = tvService.findAll(start, page, size);
 
         Logger logger = Logger.getAnonymousLogger();
         logger.info("总记录数：" + tvPage.getTotalElements());
         logger.info("总页数：" + tvPage.getTotalPages());
-        List<TV> tvList = tvPage.getContent();
+        List<Tv> tvList = tvPage.getContent();
         return tvList.toString();
     }
 
     /**
      * http://localhost:8080/tv/findAll3
+     *
      * @param like
      * @return
      * @throws ParseException
      */
     @GetMapping("tv/findAll3")
     @ResponseBody
-    public String findAll3(String like) throws ParseException {
+    public String findAll3(String like) {
         return tvService.findAllLike(like).toString();
     }
 }
