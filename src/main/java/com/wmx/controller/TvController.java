@@ -61,7 +61,13 @@ public class TvController {
         return tvList.toString();
     }
 
-    @GetMapping("findAll3")
+    /**
+     * http://localhost:8080/tv/findAll3
+     * @param like
+     * @return
+     * @throws ParseException
+     */
+    @GetMapping("tv/findAll3")
     @ResponseBody
     public String findAll3(String like) throws ParseException {
         return tvService.findAllLike(like).toString();
