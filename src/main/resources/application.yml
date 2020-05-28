@@ -1,13 +1,30 @@
 spring:
-#数据源配置
+  #数据源配置
   datasource:
     username: nasa
     password: 123456
     url: jdbc:h2:~/test1 #数据库默认在当前用户目录下，数据库不存在时会自动新建
     driver-class-name: org.h2.Driver
 
-#JPA配置
+  #JPA配置
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+
+server:
+  port: 8080    #修改服务器 http 端口，默认为 8080
+  servlet:
+    #    context-path: /h2Smil   #设置应用上下文，必须以"/"开头
+    session:
+      timeout: 60m #会话超时时间，如果未指定单位，则默认为秒。默认为 30m 即 30 分钟。
+      cookie:
+        name: h2smilCookie #会话 cookie 名称。
+  tomcat:
+    max-connections: 800  #服务器在任何给定时间接受和处理的最大连接数。默认为 1000
+    max-threads: 300      #最大工作线程数。默认 200
+    min-spare-threads: 30 #最小工作线程数。默认 10
+    max-http-post-size: 4MB  # HTTP post 请求内容的最大大小。默认为 2MB
+    uri-encoding: UTF-8 #用于解码URI的字符编码, 默认 UTF-8
+  max-http-header-size: 50MB  #HTTP消息头的最大大小（字节）,单位 KB、MB、GB、TB
