@@ -4,7 +4,6 @@ import com.wmx.service.ShortMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -18,7 +17,6 @@ import java.util.concurrent.Future;
  * @date 2020/5/27 16:56
  */
 @Service
-@EnableAsync
 public class ShortMessageServiceImpl implements ShortMessageService {
     private static final Logger logger = LoggerFactory.getLogger(ShortMessageServiceImpl.class);
 
