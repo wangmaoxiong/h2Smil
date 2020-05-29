@@ -51,6 +51,12 @@
             <version>3.8.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
         <!--热部署-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

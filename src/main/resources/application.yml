@@ -28,3 +28,18 @@ server:
     max-http-post-size: 4MB  # HTTP post 请求内容的最大大小。默认为 2MB
     uri-encoding: UTF-8 #用于解码URI的字符编码, 默认 UTF-8
   max-http-header-size: 50MB  #HTTP消息头的最大大小（字节）,单位 KB、MB、GB、TB
+  connection-timeout: 60000 #
+
+
+jasypt:
+  encryptor:
+    password: wangmaox  #加密的密钥，自定义即可，必填项
+    algorithm: PBEWithMD5AndDES  #指定解密算法
+    string-output-type: hexadecimal #设置加密内容输出的编码形式，可用的编码类型有 base64、hexadecimal（16进制）
+
+author:
+  infos:
+    address: 长沙市天心区
+    # Jasypt加密，格式为ENC(加密结果)
+    email: 114
+
