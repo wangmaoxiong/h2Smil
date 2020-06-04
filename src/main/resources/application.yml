@@ -12,6 +12,15 @@ spring:
     hibernate:
       ddl-auto: update
 
+  mvc:
+    date-format: yyyy-MM-dd HH:mm:ss
+
+  elasticsearch:
+    #    elasticsearch 客户端 jest 配置
+    jest:
+      uris: http://localhost:9200
+      read-timeout: 60s
+      connection-timeout: 30s
 
 server:
   port: 8080    #修改服务器 http 端口，默认为 8080
