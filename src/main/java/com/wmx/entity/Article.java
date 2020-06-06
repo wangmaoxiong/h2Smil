@@ -1,6 +1,7 @@
 package com.wmx.entity;
 
 import io.searchbox.annotations.JestId;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.util.Date;
 
@@ -9,6 +10,7 @@ import java.util.Date;
  * @version 1.0
  * @date 2020/5/31 17:15
  */
+@Document(indexName = "international", type = "news")
 public class Article {
 
     /**
@@ -70,5 +72,17 @@ public class Article {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", publishTime=" + publishTime +
+                ", from='" + from + '\'' +
+                ", visits=" + visits +
+                ", content='" + content + '\'' +
+                '}';
     }
 }

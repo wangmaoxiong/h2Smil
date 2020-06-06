@@ -54,6 +54,29 @@ public class JestController {
     }
 
     /**
+     * 根据文档主键 id 查询
+     * http://localhost:8080/jest/getOne?indexName=international&type=news&id=111
+     *
+     * @param indexName
+     * @param type
+     * @param id
+     * @return
+     */
+    @GetMapping("jest/getOne")
+    public String getOne(@RequestParam String indexName, @RequestParam String type, @RequestParam String id) {
+        String result;
+        try {
+            Get get = new Get.Builder(indexName, id).type(type).build();
+            DocumentResult documentResult = jestClient.execute(get);
+            result = documentResult.getJsonString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            result = e.getMessage();
+        }
+        return result;
+    }
+
+    /**
      * 全文搜索文档
      * http://localhost:8080/jest/get?indexName=international&type=news
      *

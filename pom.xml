@@ -59,10 +59,10 @@
 
         <!--Spring data elasticsearch 的 ElasticsearchTemplate 类似 JdbcTemplate、RedisTemplate，直接获取即可使用 -->
         <!--Spring data elasticsearch  还可以像使用 JPA 一样，继承一个 ElasticsearchRepository 接口便可以获得常用的增删改查方法-->
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>-->
+        </dependency>
 
         <!--jest 客户端操作 elasticsearch 搜索引擎-->
         <!-- https://mvnrepository.com/artifact/io.searchbox/jest -->
