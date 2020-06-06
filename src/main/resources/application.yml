@@ -11,7 +11,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-
+  #设置前台传入的日期格式
   mvc:
     date-format: yyyy-MM-dd HH:mm:ss
 
@@ -21,6 +21,11 @@ spring:
       uris: http://localhost:9200
       read-timeout: 60s
       connection-timeout: 30s
+
+  data:
+    elasticsearch:
+      cluster-name: elasticsearch
+      cluster-nodes: localhost:9300
 
 server:
   port: 8080    #修改服务器 http 端口，默认为 8080

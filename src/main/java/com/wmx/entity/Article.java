@@ -14,7 +14,7 @@ import java.util.Date;
 public class Article {
 
     /**
-     * @JestId 将其标识为文档id，jest 会自动将它作为文档 id 处理.
+     * @JestId ：Jest 客户端将其标识为文档 id，jest 会自动将它作为文档 id 处理，如：
      * 新增文档，用户传入了 id，如果 id 已经存在，则可以直接更新
      * 新增文档，用户没传入 id 时，es 会自动生成
      */
