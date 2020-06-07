@@ -18,13 +18,14 @@ spring:
   elasticsearch:
     #    elasticsearch 客户端 jest 配置
     jest:
-      uris: http://localhost:9200
-      read-timeout: 60s
-      connection-timeout: 30s
+      uris: http://localhost:9200  #要使用的 Elasticsearch 实例的逗号分隔列表，默认为 http://localhost:9200
+      read-timeout: 60s   #读取超时实际，默认为 3s
+      connection-timeout: 30s   #连接超时时间，默认为 3s
 
   data:
     elasticsearch:
-      cluster-name: elasticsearch
+      cluster-name: elasticsearch   #集群节点的名称、默认为 elasticsearch
+      #以逗号分隔的集群节点地址列表，因为 spring-data-elasticsearch 使用 tcp 与 es 交互，所以是 9300 端口，而不是 http 方式的 9200
       cluster-nodes: localhost:9300
 
 server:
@@ -56,4 +57,4 @@ author:
     address: 长沙市天心区
     # Jasypt加密，格式为ENC(加密结果)
     email: 114
-
+debug: true

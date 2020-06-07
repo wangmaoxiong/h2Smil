@@ -58,7 +58,7 @@
         </dependency>
 
         <!--Spring data elasticsearch 的 ElasticsearchTemplate 类似 JdbcTemplate、RedisTemplate，直接获取即可使用 -->
-        <!--Spring data elasticsearch  还可以像使用 JPA 一样，继承一个 ElasticsearchRepository 接口便可以获得常用的增删改查方法-->
+        <!--Spring data elasticsearch  可以像 JPA 一样，继承一个 ElasticsearchRepository 接口便可以获得常用的增删改查方法-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
@@ -70,6 +70,13 @@
             <groupId>io.searchbox</groupId>
             <artifactId>jest</artifactId>
             <version>6.3.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa -->
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>4.3.0</version>
         </dependency>
 
         <!--热部署-->
