@@ -4,9 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.wmx.entity.Article;
 import com.wmx.repository.ArticleRepository;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.querydsl.QPageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -81,6 +84,41 @@ public class ArticleEsController {
     }
 
     /**
+     * search 方法查询.     http://localhost:8080/article/es/search?keyword=特朗普
+     * <p>
+     * search(QueryBuilder query)：查询检索
+     * search(QueryBuilder query, Pageable pageable)：带分页检索
+     * search(SearchQuery searchQuery): NativeSearchQuery
+     * searchSimilar(T entity, String[] fields, Pageable pageable) 相似搜索
+     * </p>
+     * <p>
+     * {@link QueryBuilders} 工具类，其中提供了大量的创建 QueryBuilder 的静态方法，比如：
+     * QueryBuilders.matchAllQuery()：查询所有文档
+     * matchQuery(String name, Object text)：为提供的字段名和文本创建类型为“BOOLEAN”的匹配查询。
+     * multiMatchQuery(Object text, String... fieldNames): 同时对多个字段检索
+     * commonTermsQuery(String fieldName, Object text):为提供的字段名和文本创建公共查询。
+     * matchPhraseQuery(String name, Object text): 为提供的字段名和文本创建类型为“PHRASE”的文本查询。
+     * ...
+     * </p>
+     *
+     * @param keyword 检索的关键字
+     * @param page    页码，从 0 开始
+     * @param size    每页显示的条数
+     * @return
+     */
+    @GetMapping("article/es/search")
+    public Iterable<Article> search(@RequestParam String keyword, Integer page, Integer size) {
+        page = page == null ? 0 : page;
+        size = size == null ? 10 : size;
+        //构建分页查询对象。设置查询的页码与条数，以及排序的方式为"publishTime-发布日期倒序"
+        //默认会按着结果的相关性由高到低排序
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Order.desc("publishTime")));
+        MultiMatchQueryBuilder queryBuilder = QueryBuilders.multiMatchQuery(keyword, "from", "title", "content");
+        Iterable<Article> articles = articleRepository.search(queryBuilder, pageRequest);
+        return articles;
+    }
+
+    /**
      * 根据关键字从 content 字段进行全文检索（模糊查询）
      * http://localhost:8080/article/es/findByContentLike?keyword=英国
      *
@@ -99,15 +137,18 @@ public class ArticleEsController {
     /**
      * http://localhost:8080/article/es/findByTitle?keyword=国安法&page=0&size=10
      *
-     * @param keyword
-     * @param page  页码，从 0 开始
-     * @param size  每页显示的条数
-     * @return
+     * @param keyword ：待查询的关键字
+     * @param page    页码，从 0 开始
+     * @param size    每页显示的条数
+     * @return ：查询结果默认按相关性从高到低排列，即相关性高的靠前
      */
     @GetMapping("article/es/findByTitle")
     public List<Article> findByTitle(@RequestParam String keyword, Integer page, Integer size) {
-        keyword = keyword.replaceAll("\\s","");
-        Pageable pageable = new QPageRequest(page, size);
+        page = page == null ? 0 : page;
+        size = size == null ? 10 : size;
+        //强制去掉关键字中的空格，否则存储库中的自定义方法会抛异常
+        keyword = keyword.replaceAll("\\s", "");
+        Pageable pageable = PageRequest.of(page, size);
         Page<Article> articlePage = articleRepository.findTitle(keyword, pageable);
         List<Article> articleList = articlePage.getContent();
         return articleList;
@@ -115,15 +156,19 @@ public class ArticleEsController {
 
     /**
      * http://localhost:8080/article/es/findKeyword?keyword=英国首相 喊话特朗普&page=0&size=10
-     * @param keyword
-     * @param page
-     * @param size
-     * @return
+     *
+     * @param keyword ：待查询的关键字
+     * @param page    页码，从 0 开始
+     * @param size    每页显示的条数
+     * @return ：查询结果默认按相关性从高到低排列，即相关性高的靠前
      */
     @GetMapping("article/es/findKeyword")
     public List<Article> findByTitleLikeAAndContent(@RequestParam String keyword, Integer page, Integer size) {
-        keyword = keyword.replaceAll("\\s","");
-        Pageable pageable = new QPageRequest(page, size);
+        page = page == null ? 0 : page;
+        size = size == null ? 20 : size;
+        //强制去掉关键字中的空格，否则存储库中的自定义方法会抛异常
+        keyword = keyword.replaceAll("\\s", "");
+        Pageable pageable = PageRequest.of(page, size);
         Page<Article> articlePage = articleRepository.findTitleContent(keyword, pageable);
         List<Article> articleList = articlePage.getContent();
         return articleList;
