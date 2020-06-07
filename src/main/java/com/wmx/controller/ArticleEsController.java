@@ -82,7 +82,7 @@ public class ArticleEsController {
 
     /**
      * 根据关键字从 content 字段进行全文检索（模糊查询）
-     * http://localhost:8080/article/es/findByContentLike?keyword=xx
+     * http://localhost:8080/article/es/findByContentLike?keyword=英国
      *
      * @param keyword
      * @return
@@ -97,7 +97,7 @@ public class ArticleEsController {
     }
 
     /**
-     * http://localhost:8080/article/es/findByTitle?keyword=英国&page=0&size=10
+     * http://localhost:8080/article/es/findByTitle?keyword=国安法&page=0&size=10
      *
      * @param keyword
      * @param page  页码，从 0 开始
@@ -114,7 +114,7 @@ public class ArticleEsController {
     }
 
     /**
-     * http://localhost:8080/article/es/findKeyword?keyword=特朗普&page=0&size=10
+     * http://localhost:8080/article/es/findKeyword?keyword=英国首相 喊话特朗普&page=0&size=10
      * @param keyword
      * @param page
      * @param size

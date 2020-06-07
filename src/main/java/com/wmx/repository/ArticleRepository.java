@@ -13,6 +13,11 @@ import java.util.List;
  * 2、接口上不需要写 @Repository 注解，会自动注入到容器中
  * 3、ElasticsearchRepository<T, ID extends Serializable>：T 是数据类型，ID 是主键类型
  * 4、往 es 中添加文档时，如果没有设置文档主键，则会自动生成
+ * 5、通常继承的方法已经够用了，如果无法满足需求，则可以自定义方法，有两种方式：
+ * 5.1、自定义的方法符合 Spring data elasticsearch 规范，则会自动根据方法名称转为对 es 数据库的命令
+ * 5.2、自定义方法名称任意写，而使用 @Query 注解在方法上直接定义 es 的查询命令
+ * --自定义方法命名规范：https://docs.spring.io/spring-data/elasticsearch/docs/4.0.0.RELEASE/reference/html/#elasticsearch.repositories
+ * --接口中的方法不需要实现，如果不需要可以删除，仅作演示
  *
  * @author wangmaoxiong
  * @version 1.0
@@ -44,7 +49,7 @@ public interface ArticleRepository extends ElasticsearchRepository<Article, Stri
      * 5、特别注意：spring-data-elasticsearch 版本不一样，@Query 中的命令语法也不太一样
      * 6、特别注意：@Query 注解的命令与 ES 实际的命令语法稍微有些区别，需要注意，比如开始 query 属性注解中不需要写，以及占位符有个 0
      *
-     * @param keyword  ：待检索的关键字
+     * @param keyword  ：待检索的关键字。经过实测，参数 keyword 的值中间不能有空格，否则会报错
      * @param pageable ：分页设置，需要包含查询的页码与每页的条数，页码从 0 开始
      * @return
      */
@@ -54,10 +59,10 @@ public interface ArticleRepository extends ElasticsearchRepository<Article, Stri
     /**
      * 从 title 与 content 字段进行模糊查询
      * 1、下面 @Query 的 es 命令等价于方法名称 findByTitleAndContentLike
-     * 2、不写命令可以修改方法名称为 findByTitleAndContentLike 即可
+     * 2、不写命令可以修改方法名称为 findByTitleAndContentLike 即可，会自动根据方法名称生成命令
      *
-     * @param keyword
-     * @param pageable
+     * @param keyword  ：待检索的关键字。经过实测，参数 keyword 的值中间不能有空格，否则会报错
+     * @param pageable ：分页设置，需要包含查询的页码与每页的条数，页码从 0 开始
      * @return
      */
     @Query("{\"bool\":{\"must\":[{\"query_string\":{\"query\":\"?0\",\"fields\":[\"content\",\"title\"]}}]}}")
