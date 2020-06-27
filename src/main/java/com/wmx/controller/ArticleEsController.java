@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.wmx.entity.Article;
 import com.wmx.repository.ArticleRepository;
+import com.wmx.utils.AppUtils;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.domain.Page;
@@ -107,12 +108,13 @@ public class ArticleEsController {
      * @return
      */
     @GetMapping("article/es/search")
-    public Iterable<Article> search(@RequestParam String keyword, Integer page, Integer size) {
-        page = page == null ? 0 : page;
-        size = size == null ? 10 : size;
+    public Iterable<Article> search(@RequestParam String keyword, String page, String size) {
+        //如果传入的页码或者显示条数为空，或者是非法数字，则使用默认值。
+        page = AppUtils.checkNumeric(page, "0");
+        size = AppUtils.checkNumeric(size, "10");
         //构建分页查询对象。设置查询的页码与条数，以及排序的方式为"publishTime-发布日期倒序"
         //默认会按着结果的相关性由高到低排序
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Order.desc("publishTime")));
+        PageRequest pageRequest = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size), Sort.by(Sort.Order.desc("publishTime")));
         MultiMatchQueryBuilder queryBuilder = QueryBuilders.multiMatchQuery(keyword, "from", "title", "content");
         Iterable<Article> articles = articleRepository.search(queryBuilder, pageRequest);
         return articles;
@@ -143,12 +145,13 @@ public class ArticleEsController {
      * @return ：查询结果默认按相关性从高到低排列，即相关性高的靠前
      */
     @GetMapping("article/es/findByTitle")
-    public List<Article> findByTitle(@RequestParam String keyword, Integer page, Integer size) {
-        page = page == null ? 0 : page;
-        size = size == null ? 10 : size;
+    public List<Article> findByTitle(@RequestParam String keyword, String page, String size) {
+        //如果传入的页码或者显示条数为空，或者是非法数字，则使用默认值。
+        page = AppUtils.checkNumeric(page, "0");
+        size = AppUtils.checkNumeric(size, "10");
         //强制去掉关键字中的空格，否则存储库中的自定义方法会抛异常
         keyword = keyword.replaceAll("\\s", "");
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
         Page<Article> articlePage = articleRepository.findTitle(keyword, pageable);
         List<Article> articleList = articlePage.getContent();
         return articleList;
@@ -163,12 +166,13 @@ public class ArticleEsController {
      * @return ：查询结果默认按相关性从高到低排列，即相关性高的靠前
      */
     @GetMapping("article/es/findKeyword")
-    public List<Article> findByTitleLikeAAndContent(@RequestParam String keyword, Integer page, Integer size) {
-        page = page == null ? 0 : page;
-        size = size == null ? 20 : size;
+    public List<Article> findByTitleLikeAAndContent(@RequestParam String keyword, String page, String size) {
+        //如果传入的页码或者显示条数为空，或者是非法数字，则使用默认值。
+        page = AppUtils.checkNumeric(page, "0");
+        size = AppUtils.checkNumeric(size, "20");
         //强制去掉关键字中的空格，否则存储库中的自定义方法会抛异常
         keyword = keyword.replaceAll("\\s", "");
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
         Page<Article> articlePage = articleRepository.findTitleContent(keyword, pageable);
         List<Article> articleList = articlePage.getContent();
         return articleList;
