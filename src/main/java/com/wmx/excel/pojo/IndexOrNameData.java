@@ -1,5 +1,6 @@
 package com.wmx.excel.pojo;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 
 import java.util.Date;
@@ -14,6 +15,10 @@ import java.util.Date;
  */
 public class IndexOrNameData {
 
+    /**
+     * 忽略这个字段不与 excel 中的类匹配
+     */
+    @ExcelIgnore
     private Integer id;
 
     /**
