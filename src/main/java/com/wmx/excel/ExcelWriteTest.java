@@ -62,21 +62,23 @@ public class ExcelWriteTest {
         // 如果这里想使用03 则 传入excelType参数即可
         EasyExcel.write(outputFilePath, WriterDemoData.class).sheet("模板").doWrite(data());
         System.out.println("输出 excel 文件：" + outputFilePath);
+    }
 
-        // 写法2
-//        fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + "订单模板.xlsx";
-//        // 这里 需要指定写用哪个class去写
-//        ExcelWriter excelWriter = null;
-//        try {
-//            excelWriter = EasyExcel.write(fileName, WriterDemoData.class).build();
-//            WriteSheet writeSheet = EasyExcel.writerSheet("模板").build();
-//            excelWriter.write(data(), writeSheet);
-//        } finally {
-//            // 千万别忘记finish 会帮忙关闭流
-//            if (excelWriter != null) {
-//                excelWriter.finish();
-//            }
-//        }
+    @Test
+    public void simpleWrite2() {
+        // 这里 需要指定写用哪个class去写
+        ExcelWriter excelWriter = null;
+        try {
+            excelWriter = EasyExcel.write(outputFilePath, WriterDemoData.class).build();
+            WriteSheet writeSheet = EasyExcel.writerSheet("模板").build();
+            excelWriter.write(data(), writeSheet);
+            System.out.println("输出文件：" + outputFilePath);
+        } finally {
+            // 千万别忘记finish 会帮忙关闭流
+            if (excelWriter != null) {
+                excelWriter.finish();
+            }
+        }
     }
 
     /**
@@ -92,22 +94,24 @@ public class ExcelWriteTest {
      */
     @Test
     public void excludeOrIncludeWrite() {
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
-
         // 根据用户传入字段 假设我们要忽略 date
         Set<String> excludeColumnFiledNames = new HashSet<String>();
-        excludeColumnFiledNames.add("date");
+        excludeColumnFiledNames.add("shipDate");
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        EasyExcel.write(fileName, WriterDemoData.class).excludeColumnFiledNames(excludeColumnFiledNames).sheet("模板")
+        EasyExcel.write(outputFilePath, WriterDemoData.class).excludeColumnFiledNames(excludeColumnFiledNames).sheet("模板")
                 .doWrite(data());
+        System.out.printf("输出文件：%s%n", outputFilePath);
+    }
 
-        fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + "订单模板.xlsx";
+    @Test
+    public void excludeOrIncludeWrite2() {
         // 根据用户传入字段 假设我们只要导出 date
         Set<String> includeColumnFiledNames = new HashSet<String>();
-        includeColumnFiledNames.add("date");
+        includeColumnFiledNames.add("shipDate");
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        EasyExcel.write(fileName, WriterDemoData.class).includeColumnFiledNames(includeColumnFiledNames).sheet("模板")
+        EasyExcel.write(outputFilePath, WriterDemoData.class).includeColumnFiledNames(includeColumnFiledNames).sheet("模板")
                 .doWrite(data());
+        System.out.printf("输出文件：%s%n", outputFilePath);
     }
 
     /**
@@ -121,9 +125,9 @@ public class ExcelWriteTest {
      */
     @Test
     public void indexWrite() {
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        EasyExcel.write(fileName, IndexData.class).sheet("模板").doWrite(data());
+        EasyExcel.write(outputFilePath, IndexData.class).sheet("模板").doWrite(data());
+        System.out.printf("输出文件：%s%n", outputFilePath);
     }
 
     /**
@@ -137,82 +141,9 @@ public class ExcelWriteTest {
      */
     @Test
     public void complexHeadWrite() {
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        EasyExcel.write(fileName, ComplexHeadData.class).sheet("模板").doWrite(data());
-    }
-
-    /**
-     * 重复多次写入
-     * <p>
-     * 1. 创建excel对应的实体对象 参照{@link ComplexHeadData}
-     * <p>
-     * 2. 使用{@link ExcelProperty}注解指定复杂的头
-     * <p>
-     * 3. 直接调用二次写入即可
-     */
-    @Test
-    public void repeatedWrite() {
-        // 方法1 如果写到同一个sheet
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
-        ExcelWriter excelWriter = null;
-        try {
-            // 这里 需要指定写用哪个class去写
-            excelWriter = EasyExcel.write(fileName, WriterDemoData.class).build();
-            // 这里注意 如果同一个sheet只要创建一次
-            WriteSheet writeSheet = EasyExcel.writerSheet("模板").build();
-            // 去调用写入,这里我调用了五次，实际使用时根据数据库分页的总的页数来
-            for (int i = 0; i < 5; i++) {
-                // 分页去数据库查询数据 这里可以去数据库查询每一页的数据
-                List<WriterDemoData> data = data();
-                excelWriter.write(data, writeSheet);
-            }
-        } finally {
-            // 千万别忘记finish 会帮忙关闭流
-            if (excelWriter != null) {
-                excelWriter.finish();
-            }
-        }
-
-        // 方法2 如果写到不同的sheet 同一个对象
-        fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
-        try {
-            // 这里 指定文件
-            excelWriter = EasyExcel.write(fileName, WriterDemoData.class).build();
-            // 去调用写入,这里我调用了五次，实际使用时根据数据库分页的总的页数来。这里最终会写到5个sheet里面
-            for (int i = 0; i < 5; i++) {
-                // 每次都要创建writeSheet 这里注意必须指定sheetNo 而且sheetName必须不一样
-                WriteSheet writeSheet = EasyExcel.writerSheet(i, "模板" + i).build();
-                // 分页去数据库查询数据 这里可以去数据库查询每一页的数据
-                List<WriterDemoData> data = data();
-                excelWriter.write(data, writeSheet);
-            }
-        } finally {
-            // 千万别忘记finish 会帮忙关闭流
-            if (excelWriter != null) {
-                excelWriter.finish();
-            }
-        }
-
-        // 方法3 如果写到不同的sheet 不同的对象
-        fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
-        try {
-            // 这里 指定文件
-            excelWriter = EasyExcel.write(fileName).build();
-            // 去调用写入,这里我调用了五次，实际使用时根据数据库分页的总的页数来。这里最终会写到5个sheet里面
-            for (int i = 0; i < 5; i++) {
-                // 每次都要创建writeSheet 这里注意必须指定sheetNo 而且sheetName必须不一样。这里注意DemoData.class 可以每次都变，我这里为了方便 所以用的同一个class 实际上可以一直变
-                WriteSheet writeSheet = EasyExcel.writerSheet(i, "模板" + i).head(WriterDemoData.class).build();
-                // 分页去数据库查询数据 这里可以去数据库查询每一页的数据
-                List<WriterDemoData> data = data();
-                excelWriter.write(data, writeSheet);
-            }
-        } finally {
-            // 千万别忘记finish 会帮忙关闭流
-            if (excelWriter != null) {
-                excelWriter.finish();
-            }
-        }
+        EasyExcel.write(outputFilePath, ComplexHeadData.class).sheet("模板").doWrite(data());
+        System.out.printf("输出文件：%s%n", outputFilePath);
     }
 
     /**
@@ -226,9 +157,9 @@ public class ExcelWriteTest {
      */
     @Test
     public void converterWrite() {
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        EasyExcel.write(fileName, ConverterData.class).sheet("模板").doWrite(data());
+        EasyExcel.write(outputFilePath, ConverterData.class).sheet("模板").doWrite(data());
+        System.out.printf("输出文件：%s%n", outputFilePath);
     }
 
     /**
@@ -240,23 +171,22 @@ public class ExcelWriteTest {
      */
     @Test
     public void imageWrite() throws Exception {
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
         // 如果使用流 记得关闭
         InputStream inputStream = null;
         try {
             List<ImageData> list = new ArrayList<ImageData>();
             ImageData imageData = new ImageData();
             list.add(imageData);
-            String imagePath = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + "img.jpg";
+            String imagePath = "C:\\wmx\\desktop\\csdn.png";
             // 放入五种类型的图片 实际使用只要选一种即可
             imageData.setByteArray(FileUtils.readFileToByteArray(new File(imagePath)));
             imageData.setFile(new File(imagePath));
             imageData.setString(imagePath);
             inputStream = FileUtils.openInputStream(new File(imagePath));
             imageData.setInputStream(inputStream);
-            imageData.setUrl(new URL(
-                    "https://raw.githubusercontent.com/alibaba/easyexcel/master/src/test/resources/converter/img.jpg"));
-            EasyExcel.write(fileName, ImageData.class).sheet().doWrite(list);
+            imageData.setUrl(new URL("https://avatar.csdnimg.cn/6/D/4/1_wangmx1993328.jpg"));
+            EasyExcel.write(outputFilePath, ImageData.class).sheet().doWrite(list);
+            System.out.printf("输出文件：%s%n", outputFilePath);
         } finally {
             if (inputStream != null) {
                 inputStream.close();
@@ -277,10 +207,10 @@ public class ExcelWriteTest {
      */
     @Test
     public void templateWrite() {
-        String templateFileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + "demo.xlsx";
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
+        String templateFileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + "订单模板.xlsx";
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        EasyExcel.write(fileName, WriterDemoData.class).withTemplate(templateFileName).sheet().doWrite(data());
+        EasyExcel.write(outputFilePath, WriterDemoData.class).withTemplate(templateFileName).sheet().doWrite(data());
+        System.out.printf("输出文件：%s%n", outputFilePath);
     }
 
     /**
@@ -294,9 +224,9 @@ public class ExcelWriteTest {
      */
     @Test
     public void widthAndHeightWrite() {
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        EasyExcel.write(fileName, WidthAndHeightData.class).sheet("模板").doWrite(data());
+        EasyExcel.write(outputFilePath, WidthAndHeightData.class).sheet("模板").doWrite(data());
+        System.out.printf("输出文件：%s%n", outputFilePath);
     }
 
     /**
@@ -310,9 +240,9 @@ public class ExcelWriteTest {
      */
     @Test
     public void annotationStyleWrite() {
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        EasyExcel.write(fileName, DemoStyleData.class).sheet("模板").doWrite(data());
+        EasyExcel.write(outputFilePath, DemoStyleData.class).sheet("模板").doWrite(data());
+        System.out.printf("输出文件：%s%n", outputFilePath);
     }
 
     /**
@@ -326,7 +256,6 @@ public class ExcelWriteTest {
      */
     @Test
     public void handlerStyleWrite() {
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
         // 头的策略
         WriteCellStyle headWriteCellStyle = new WriteCellStyle();
         // 背景设置为红色
@@ -349,8 +278,9 @@ public class ExcelWriteTest {
                 new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle);
 
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        EasyExcel.write(fileName, WriterDemoData.class).registerWriteHandler(horizontalCellStyleStrategy).sheet("模板")
+        EasyExcel.write(outputFilePath, WriterDemoData.class).registerWriteHandler(horizontalCellStyleStrategy).sheet("模板")
                 .doWrite(data());
+        System.out.printf("输出文件：%s%n", outputFilePath);
     }
 
     /**
@@ -367,17 +297,21 @@ public class ExcelWriteTest {
     @Test
     public void mergeWrite() {
         // 方法1 注解
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
         // 在DemoStyleData里面加上ContentLoopMerge注解
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        EasyExcel.write(fileName, DemoMergeData.class).sheet("模板").doWrite(data());
+        EasyExcel.write(outputFilePath, DemoMergeData.class).sheet("模板").doWrite(data());
+        System.out.printf("输出文件：%s%n", outputFilePath);
 
+    }
+
+    @Test
+    public void mergeWrite2(){
         // 方法2 自定义合并单元格策略
-        fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
         // 每隔2行会合并 把eachColumn 设置成 3 也就是我们数据的长度，所以就第一列会合并。当然其他合并策略也可以自己写
         LoopMergeStrategy loopMergeStrategy = new LoopMergeStrategy(2, 0);
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        EasyExcel.write(fileName, WriterDemoData.class).registerWriteHandler(loopMergeStrategy).sheet("模板").doWrite(data());
+        EasyExcel.write(outputFilePath, WriterDemoData.class).registerWriteHandler(loopMergeStrategy).sheet("模板").doWrite(data());
+        System.out.printf("输出文件：%s%n", outputFilePath);
     }
 
     /**
@@ -389,12 +323,11 @@ public class ExcelWriteTest {
      */
     @Test
     public void tableWrite() {
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
         // 这里直接写多个table的案例了，如果只有一个 也可以直一行代码搞定，参照其他案例
         // 这里 需要指定写用哪个class去写
         ExcelWriter excelWriter = null;
         try {
-            excelWriter = EasyExcel.write(fileName, WriterDemoData.class).build();
+            excelWriter = EasyExcel.write(outputFilePath, WriterDemoData.class).build();
             // 把sheet设置为不需要头 不然会输出sheet的头 这样看起来第一个table 就有2个头了
             WriteSheet writeSheet = EasyExcel.writerSheet("模板").needHead(Boolean.FALSE).build();
             // 这里必须指定需要头，table 会继承sheet的配置，sheet配置了不需要，table 默认也是不需要
@@ -404,6 +337,7 @@ public class ExcelWriteTest {
             excelWriter.write(data(), writeSheet, writeTable0);
             // 第二次写如也会创建头，然后在第一次的后面写入数据
             excelWriter.write(data(), writeSheet, writeTable1);
+            System.out.printf("输出文件：%s%n", outputFilePath);
         } finally {
             // 千万别忘记finish 会帮忙关闭流
             if (excelWriter != null) {
@@ -424,30 +358,12 @@ public class ExcelWriteTest {
      */
     @Test
     public void dynamicHeadWrite() {
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
-        EasyExcel.write(fileName)
+        EasyExcel.write(outputFilePath)
                 // 这里放入动态头
                 .head(head()).sheet("模板")
                 // 当然这里数据也可以用 List<List<String>> 去传入
                 .doWrite(data());
-    }
-
-    /**
-     * 插入批注
-     * <p>
-     * 1. 创建excel对应的实体对象 参照{@link WriterDemoData}
-     * <p>
-     * 2. 注册拦截器 {@link CommentWriteHandler}
-     * <p>
-     * 2. 直接写即可
-     */
-    @Test
-    public void commentWrite() {
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
-        // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        // 这里要注意inMemory 要设置为true，才能支持批注。目前没有好的办法解决 不在内存处理批注。这个需要自己选择。
-        EasyExcel.write(fileName, WriterDemoData.class).inMemory(Boolean.TRUE).registerWriteHandler(new CommentWriteHandler())
-                .sheet("模板").doWrite(data());
+        System.out.printf("输出文件：%s%n", outputFilePath);
     }
 
     /**
@@ -462,9 +378,9 @@ public class ExcelWriteTest {
     @Test
     public void variableTitleWrite() {
         // 写法1
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        EasyExcel.write(fileName, ConverterData.class).head(variableTitleHead()).sheet("模板").doWrite(data());
+        EasyExcel.write(outputFilePath, ConverterData.class).head(variableTitleHead()).sheet("模板").doWrite(data());
+        System.out.printf("输出文件：%s%n", outputFilePath);
     }
 
     /**
@@ -473,21 +389,9 @@ public class ExcelWriteTest {
     @Test
     public void noModelWrite() {
         // 写法1
-        String fileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + System.currentTimeMillis() + ".xlsx";
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
-        EasyExcel.write(fileName).head(head()).sheet("模板").doWrite(dataList());
-    }
-
-    private List<LongestMatchColumnWidthData> dataLong() {
-        List<LongestMatchColumnWidthData> list = new ArrayList<LongestMatchColumnWidthData>();
-        for (int i = 0; i < 10; i++) {
-            LongestMatchColumnWidthData data = new LongestMatchColumnWidthData();
-            data.setString("测试很长的字符串测试很长的字符串测试很长的字符串" + i);
-            data.setDate(new Date());
-            data.setDoubleData(1000000000000.0);
-            list.add(data);
-        }
-        return list;
+        EasyExcel.write(outputFilePath).head(head()).sheet("模板").doWrite(dataList());
+        System.out.printf("输出文件：%s%n", outputFilePath);
     }
 
     private List<List<String>> variableTitleHead() {
@@ -542,5 +446,85 @@ public class ExcelWriteTest {
             list.add(data);
         }
         return list;
+    }
+
+
+    /**
+     * 重复多次写入
+     * <p>
+     * 1. 创建excel对应的实体对象 参照{@link ComplexHeadData}
+     * <p>
+     * 2. 使用{@link ExcelProperty}注解指定复杂的头
+     * <p>
+     * 3. 直接调用二次写入即可
+     */
+    @Test
+    public void repeatedWrite() {
+        // 方法1 如果写到同一个sheet
+        ExcelWriter excelWriter = null;
+        try {
+            // 这里 需要指定写用哪个class去写
+            excelWriter = EasyExcel.write(outputFilePath, WriterDemoData.class).build();
+            // 这里注意 如果同一个sheet只要创建一次
+            WriteSheet writeSheet = EasyExcel.writerSheet("模板").build();
+            // 去调用写入,这里我调用了五次，实际使用时根据数据库分页的总的页数来
+            for (int i = 0; i < 5; i++) {
+                // 分页去数据库查询数据 这里可以去数据库查询每一页的数据
+                List<WriterDemoData> data = data();
+                excelWriter.write(data, writeSheet);
+            }
+            System.out.printf("输出文件：%s%n", outputFilePath);
+        } finally {
+            // 千万别忘记finish 会帮忙关闭流
+            if (excelWriter != null) {
+                excelWriter.finish();
+            }
+        }
+    }
+
+    @Test
+    public void repeatedWrite2(){
+        ExcelWriter excelWriter = null;
+        try {
+            // 这里 指定文件
+            excelWriter = EasyExcel.write(outputFilePath, WriterDemoData.class).build();
+            // 去调用写入,这里我调用了五次，实际使用时根据数据库分页的总的页数来。这里最终会写到5个sheet里面
+            for (int i = 0; i < 5; i++) {
+                // 每次都要创建writeSheet 这里注意必须指定sheetNo 而且sheetName必须不一样
+                WriteSheet writeSheet = EasyExcel.writerSheet(i, "模板" + i).build();
+                // 分页去数据库查询数据 这里可以去数据库查询每一页的数据
+                List<WriterDemoData> data = data();
+                excelWriter.write(data, writeSheet);
+                System.out.printf("输出文件：%s%n", outputFilePath);
+            }
+        } finally {
+            // 千万别忘记finish 会帮忙关闭流
+            if (excelWriter != null) {
+                excelWriter.finish();
+            }
+        }
+    }
+
+    @Test
+    public void repeatedWrite3(){
+        ExcelWriter excelWriter = null;
+        try {
+            // 这里 指定文件
+            excelWriter = EasyExcel.write(outputFilePath).build();
+            // 去调用写入,这里我调用了五次，实际使用时根据数据库分页的总的页数来。这里最终会写到5个sheet里面
+            for (int i = 0; i < 5; i++) {
+                // 每次都要创建writeSheet 这里注意必须指定sheetNo 而且sheetName必须不一样。这里注意DemoData.class 可以每次都变，我这里为了方便 所以用的同一个class 实际上可以一直变
+                WriteSheet writeSheet = EasyExcel.writerSheet(i, "模板" + i).head(WriterDemoData.class).build();
+                // 分页去数据库查询数据 这里可以去数据库查询每一页的数据
+                List<WriterDemoData> data = data();
+                excelWriter.write(data, writeSheet);
+                System.out.printf("输出文件：%s%n", outputFilePath);
+            }
+        } finally {
+            // 千万别忘记finish 会帮忙关闭流
+            if (excelWriter != null) {
+                excelWriter.finish();
+            }
+        }
     }
 }

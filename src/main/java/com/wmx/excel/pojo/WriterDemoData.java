@@ -15,19 +15,19 @@ import java.util.Date;
  */
 public class WriterDemoData {
 
-    @ExcelProperty(value = "编号")
+    @ExcelProperty(value = {"订单信息汇总表","编号"})
     private Integer id;
 
-    @ExcelProperty(value = "名称")
+    @ExcelProperty(value = {"订单信息汇总表","名称"})
     private String name;
 
-    @ExcelProperty(value = "数量")
+    @ExcelProperty(value = {"订单信息汇总表","数量"})
     private Integer number;
 
-    @ExcelProperty(value = "单价")
+    @ExcelProperty(value = {"订单信息汇总表","单价"})
     private Float univalent;
 
-    @ExcelProperty(value = "出货日期")
+    @ExcelProperty(value = {"订单信息汇总表","出货日期"})
     private Date shipDate;
 
     public Integer getId() {
