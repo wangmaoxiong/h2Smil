@@ -1,9 +1,9 @@
-package com.wmx.excel.pojo;
+package com.wmx.excel.test.pojo;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.format.DateTimeFormat;
 import com.alibaba.excel.annotation.format.NumberFormat;
-import com.wmx.excel.converter.CustomStringStringConverter;
+import com.wmx.excel.test.converter.CustomStringStringConverter;
 
 /**
  * 实体对象

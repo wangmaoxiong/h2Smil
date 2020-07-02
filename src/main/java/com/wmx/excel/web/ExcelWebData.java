@@ -1,7 +1,8 @@
-package com.wmx.excel.pojo;
+package com.wmx.excel.web;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
 
 import java.util.Date;
 
@@ -13,7 +14,8 @@ import java.util.Date;
  * @version 1.0
  * @date 2020/6/27 14:02
  */
-public class IndexOrNameData {
+@ColumnWidth(15)
+public class ExcelWebData {
 
     /**
      * 忽略这个字段不与 excel 中的类匹配
@@ -24,22 +26,25 @@ public class IndexOrNameData {
     /**
      * @ExcelProperty 注解常用属性
      * index：表示下表匹配，从0开始，即 name 属性对应表格中的第1列的值，依此类推
-     * value：表示名称匹配，直接指明对应表中的哪一列
+     * value：表示名称匹配，直接指明对应表中的哪一列，值是一个数组，按顺序为一级标题、二级标题，相同时，会自动合并.
      * 官方不建议 index 和 name 同时使用，同一个对象中，要么只用 index，要么只用 name。
      */
-    @ExcelProperty(index = 0)
+    @ExcelProperty(index = 0, value = {"客户信息汇总表", "姓名"})
     private String name;
 
-    @ExcelProperty("性别")
+    @ColumnWidth(12)
+    @ExcelProperty(index = 1, value = {"客户信息汇总表", "性别"})
     private String gender;
 
-    @ExcelProperty(index = 1)
+    @ExcelProperty(index = 2, value = {"客户信息汇总表", "年龄"})
+    @ColumnWidth(12)
     private Integer age;
 
-    @ExcelProperty(value = "手机号码")
+    @ExcelProperty(index = 3, value = {"客户信息汇总表", "手机号码"})
     private String phoneNumber;
 
-    @ExcelProperty(value = "生日")
+    @ExcelProperty(index = 4, value = {"客户信息汇总表", "生日"})
+    @ColumnWidth(20)
     private Date birthday;
 
     public Integer getId() {

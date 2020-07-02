@@ -1,9 +1,9 @@
-package com.wmx.excel.listener;
+package com.wmx.excel.test.listener;
+
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.exception.ExcelDataConvertException;
-import com.alibaba.excel.read.builder.AbstractExcelReaderParameterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,54 +18,43 @@ import java.util.Map;
  * 3、读取监听器的目的在于能捕获读取到的每一条数据，这样可以轻松的对每一条数据进行处理，比如存库、清洗、验证、记录日志等
  * 4、特别注意：读取监听器不能交由 spring 容器管理，EasyExcel.read 时通过 new 对象，如果本类中需要用到哪个 bean，则可以通过构造器参数传入。
  * 比如需要将读取的数据存储到数据库，显然需要 XxxServer 或者 XxxDao，这些 bean 是交由 Spring 容器管理的，所以可以通过本来的构造器参数传入。
- * 5、这里定义为泛型，作为公共的读取监听器，方便任意类型的实体读取时都能调用
+ * 5、这里使用 Map<Integer, String> 类型,每一个 map 表示 excel 中的一行数据，key 为列的索引（从0开始），value 为值
  *
  * @author wangMaoXiong
  * @version 1.0
- * @date 2020/6/27 14:12
+ * @date 2020/6/27 14:39
  */
-public class CommonReadListener<T> extends AnalysisEventListener<T> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommonReadListener.class);
+public class MapDataListener extends AnalysisEventListener<Map<Integer, String>> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MapDataListener.class);
     /**
      * BATCH_COUNT：批处理的条数，比如每 50 条数据存入一次数据库
      * dataList：用于临时存放读取到的数据
      */
     private static final int BATCH_COUNT = 50;
-    List<T> dataList = new ArrayList<>();
+    List<Map<Integer, String>> dataList = new ArrayList<Map<Integer, String>>();
 
     /**
      * 假如本来需要 XxxServer 或者 XxxDao 则可以通过此构造器参数传入
      */
-    public CommonReadListener() {
+    public MapDataListener() {
     }
 
     /**
      * 每成功解析一条数据，都进入此方法
      *
-     * @param data    :读取到的数据， {@link AnalysisContext#readRowHolder()}
+     * @param data    :读取到的数据
      * @param context ：excel 读取器的上下文对象
      */
     @Override
-    public void invoke(T data, AnalysisContext context) {
-        LOGGER.info("解析到条数据: {}", data);
+    public void invoke(Map<Integer, String> data, AnalysisContext context) {
+        LOGGER.info("读取数据为：{}", data);
         dataList.add(data);
+        // 达到批处理次数时，就存储一次数据库，防止成千上万条数据占用内存，出现 OOM
         if (dataList.size() >= BATCH_COUNT) {
-            saveData();
+            this.saveData();
+            // 存储完成后清空列表
             dataList.clear();
         }
-    }
-
-    /**
-     * 每解析完成一行表头调用一次本方法
-     * 1、因为读取的时候会使用 {@link AbstractExcelReaderParameterBuilder#headRowNumber(java.lang.Integer) 设置表头行数
-     * 2、所以会先逐行解析表头，然后逐行读取正文，回调上面的 invoke 方法
-     *
-     * @param headMap
-     * @param context
-     */
-    @Override
-    public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
-        LOGGER.info("解析到一条头数据:{}", headMap);
     }
 
     /**
@@ -75,9 +64,11 @@ public class CommonReadListener<T> extends AnalysisEventListener<T> {
      */
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
-        saveData();
         LOGGER.info("所有数据解析完成！");
+        // 对最后遗留的数据存储到数据库
+        this.saveData();
     }
+
 
     /**
      * 解析异常时进入本方法，如果抛出异常，则停止读取，否则继续读取下一行
@@ -90,7 +81,7 @@ public class CommonReadListener<T> extends AnalysisEventListener<T> {
      */
     @Override
     public void onException(Exception exception, AnalysisContext context) {
-        LOGGER.error("解析失败，继续解析下一行:{}", exception.getMessage());
+        LOGGER.error("解析失败，继续下一行:{}", exception.getMessage());
         if (exception instanceof ExcelDataConvertException) {
             ExcelDataConvertException excelDataConvertException = (ExcelDataConvertException) exception;
             LOGGER.error("第 {} 行 {} 列解析异常，数据为:{}", excelDataConvertException.getRowIndex(),

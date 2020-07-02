@@ -1,4 +1,4 @@
-package com.wmx.excel;
+package com.wmx.excel.test;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
@@ -8,12 +8,12 @@ import com.alibaba.excel.annotation.format.NumberFormat;
 import com.alibaba.excel.converters.DefaultConverterLoader;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.read.metadata.ReadSheet;
-import com.wmx.excel.listener.CommonReadListener;
-import com.wmx.excel.listener.MapDataListener;
-import com.wmx.excel.listener.SimpleDataListener;
-import com.wmx.excel.pojo.ConverterData;
-import com.wmx.excel.pojo.IndexOrNameData;
-import com.wmx.excel.pojo.SimpleData;
+import com.wmx.excel.test.listener.CommonReadListener;
+import com.wmx.excel.test.listener.MapDataListener;
+import com.wmx.excel.test.listener.SimpleDataListener;
+import com.wmx.excel.test.pojo.ConverterData;
+import com.wmx.excel.test.pojo.IndexOrNameData;
+import com.wmx.excel.test.pojo.SimpleData;
 import org.junit.Test;
 
 import java.io.File;
@@ -231,5 +231,4 @@ public class ExcelReadTest {
         List<IndexOrNameData> objectList = EasyExcel.read(fileName, IndexOrNameData.class, new CommonReadListener()).sheet(0).headRowNumber(2).doReadSync();
         objectList.stream().forEach(item -> System.out.println("doReadSync 读取：" + item));
     }
-
 }

@@ -1,4 +1,4 @@
-package com.wmx.excel;
+package com.wmx.excel.test;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
@@ -8,8 +8,8 @@ import com.alibaba.excel.write.metadata.WriteTable;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
-import com.wmx.excel.pojo.WriterDemoData;
-import com.wmx.excel.pojo.WriterImageData;
+import com.wmx.excel.test.pojo.WriterDemoData;
+import com.wmx.excel.test.pojo.WriterImageData;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.junit.After;
@@ -163,7 +163,7 @@ public class ExcelWriteTest {
         String templateFileName = ExcelWriteTest.class.getResource("/").getPath() + "excelTemplates" + File.separator + "订单模板.xlsx";
         EasyExcel.write(outputFilePath, WriterDemoData.class)
                 .withTemplate(templateFileName)
-                .sheet("根据模板写入").doWrite(data());
+                .sheet(0).doWrite(data());
     }
 
     /**

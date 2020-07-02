@@ -1,4 +1,4 @@
-package com.wmx.excel.pojo;
+package com.wmx.excel.test.pojo;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
