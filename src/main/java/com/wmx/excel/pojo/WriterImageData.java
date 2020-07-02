@@ -19,21 +19,39 @@ import java.util.Arrays;
  */
 @ContentRowHeight(100)
 @ColumnWidth(100 / 8)
-public class ImageData {
+public class WriterImageData {
+
+    @ExcelProperty(value = {"图片导出", "编号"})
+    private Integer id;
+
+    @ExcelProperty(value = {"图片导出", "File 类型图片"})
     private File file;
+
+    @ExcelProperty(value = {"图片导出", "InputStream 类型图片"})
     private InputStream inputStream;
     /**
      * 如果string类型 必须指定转换器，string默认转换成string
      */
-    @ExcelProperty(converter = StringImageConverter.class)
+    @ExcelProperty(converter = StringImageConverter.class, value = {"图片导出", "String 类型图片地址"})
     private String string;
+
+    @ExcelProperty(value = {"图片导出", "字节数组图片类型"})
     private byte[] byteArray;
     /**
      * 根据url导出
      *
      * @since 2.1.1
      */
+    @ExcelProperty(value = {"图片导出", "url 类型图片"})
     private URL url;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public File getFile() {
         return file;
@@ -77,7 +95,7 @@ public class ImageData {
 
     @Override
     public String toString() {
-        return "ImageData{" +
+        return "WriterImageData{" +
                 "file=" + file +
                 ", inputStream=" + inputStream +
                 ", string='" + string + '\'' +
