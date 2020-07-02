@@ -26,9 +26,9 @@ import java.util.Map;
  * @version 1.0
  * @date 2020/6/27 13:52
  */
-public class SimpleDataListener extends AnalysisEventListener<SimpleData> {
+public class PojoDataListener extends AnalysisEventListener<SimpleData> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDataListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PojoDataListener.class);
     /**
      * BATCH_COUNT：批处理的条数，比如每 50 条数据存入一次数据库
      * dataList：用于临时存放读取到的数据
@@ -39,7 +39,7 @@ public class SimpleDataListener extends AnalysisEventListener<SimpleData> {
     /**
      * 假如本来需要 XxxServer 或者 XxxDao 则可以通过此构造器参数传入
      */
-    public SimpleDataListener() {
+    public PojoDataListener() {
     }
 
     /**

@@ -8,6 +8,7 @@ import com.alibaba.excel.write.metadata.WriteTable;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
+import com.wmx.excel.test.pojo.ConverterData;
 import com.wmx.excel.test.pojo.WriterDemoData;
 import com.wmx.excel.test.pojo.WriterImageData;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -92,6 +93,14 @@ public class ExcelWriteTest {
                 excelWriter.finish();
             }
         }
+    }
+
+    /**
+     * 格式转换，读写的时候，可以对日期、数值、字符串等进行格式转换。
+     */
+    @Test
+    public void converterWrite() {
+        EasyExcel.write(outputFilePath, ConverterData.class).sheet(0).doWrite(converterData());
     }
 
     /**
@@ -405,4 +414,21 @@ public class ExcelWriteTest {
         return list;
     }
 
+    /**
+     * POJO 实体 List
+     *
+     * @return
+     */
+    private List<ConverterData> converterData() {
+        List<ConverterData> list = new ArrayList<>();
+        int count = 10;
+        for (int i = 0; i < count; i++) {
+            ConverterData data = new ConverterData();
+            data.setName("华为 x1" + i);
+            data.setBirthday(new Date());
+            data.setRepurchasing(new Random().nextFloat());
+            list.add(data);
+        }
+        return list;
+    }
 }

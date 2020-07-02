@@ -7,8 +7,9 @@ import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import java.util.Date;
 
 /**
- * 使用 ExcelProperty 注解将实体属性与 excel 文件的列对应起来，否则默认是按顺序匹配的
- * 日期类型也能轻松处理，如表格中为 1999/9/15、1999-09-15 等等日期各式都能解析成功
+ * 使用 ExcelProperty 注解将实体属性与 excel 文件的列进行对应，默认是按顺序匹配
+ * 1、日期类型也能轻松处理，如表格中为 1999/9/15、1999-09-15 等等日期各式，读取时都能解析成功
+ * 2、@ColumnWidth 属于样式注解，指定列宽，更多可以参考 {@link WriterDemoData}
  *
  * @author wangMaoXiong
  * @version 1.0

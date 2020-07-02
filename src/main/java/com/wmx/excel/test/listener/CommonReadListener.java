@@ -24,6 +24,7 @@ import java.util.Map;
  * @version 1.0
  * @date 2020/6/27 14:12
  */
+@SuppressWarnings("all")
 public class CommonReadListener<T> extends AnalysisEventListener<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonReadListener.class);
     /**

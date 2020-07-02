@@ -10,7 +10,7 @@ import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.read.metadata.ReadSheet;
 import com.wmx.excel.test.listener.CommonReadListener;
 import com.wmx.excel.test.listener.MapDataListener;
-import com.wmx.excel.test.listener.SimpleDataListener;
+import com.wmx.excel.test.listener.PojoDataListener;
 import com.wmx.excel.test.pojo.ConverterData;
 import com.wmx.excel.test.pojo.IndexOrNameData;
 import com.wmx.excel.test.pojo.SimpleData;
@@ -34,7 +34,7 @@ public class ExcelReadTest {
     /**
      * 最简单/基本的读取 excel 文件内容
      * 1. 创建 excel 对应的实体对象 {@link SimpleData}
-     * 2. 默认会逐行读取 excel，需要创建一个读取回调监听器 {@link SimpleDataListener
+     * 2. 默认会逐行读取 excel，需要创建一个读取回调监听器 {@link PojoDataListener
      * <p>
      * ExcelReaderBuilder read(String pathName, Class head, ReadListener readListener)
      * 1、pathName：excel 文件路径
@@ -60,7 +60,7 @@ public class ExcelReadTest {
          * void doRead() :正式读取文件数据，读取完成内部会调用 finish() 方法，关闭流，释放资源。
          * List<T> doReadSync()：同步读取，然后返回读取结果。对于数据量大时，不建议这么做，因为都会临时放入到缓存中。
          */
-        EasyExcel.read(fileName, SimpleData.class, new SimpleDataListener()).sheet(0).headRowNumber(2).doRead();
+        EasyExcel.read(fileName, SimpleData.class, new PojoDataListener()).sheet(0).headRowNumber(2).doRead();
     }
 
     /**
@@ -73,7 +73,7 @@ public class ExcelReadTest {
         ExcelReader excelReader = null;
         try {
             //构建 ExcelReader 对象，指定读取的文件，实体对象，读取监听器
-            excelReader = EasyExcel.read(fileName, SimpleData.class, new SimpleDataListener()).build();
+            excelReader = EasyExcel.read(fileName, SimpleData.class, new PojoDataListener()).build();
             //构建 ReadSheet 对象，读取的第一页 sheet，表头占用了 2 行
             ReadSheet readSheet = EasyExcel.readSheet(0).headRowNumber(2).build();
             //excel 读取器读取 sheet 中的内容
@@ -133,7 +133,7 @@ public class ExcelReadTest {
          * void doReadAll()：表示读取所以的 sheet
          * List<T> doReadAllSync()：同步读取所有的 sheet，最后将结果返回
          */
-        EasyExcel.read(inputStream, SimpleData.class, new SimpleDataListener()).headRowNumber(2).doReadAll();
+        EasyExcel.read(inputStream, SimpleData.class, new PojoDataListener()).headRowNumber(2).doReadAll();
         /**
          * 注意事项：
          * 通常 excel 中的多个 sheet 数据格式都是不同的，比如第一页可能是采购信息、第二页可能是销售信息、第三页是客户信息等等，
@@ -161,9 +161,9 @@ public class ExcelReadTest {
              * 3、这里是操作两个 sheet ，更多时也是同理
              */
             ReadSheet readSheet1 =
-                    EasyExcel.readSheet(0).headRowNumber(2).head(SimpleData.class).registerReadListener(new SimpleDataListener()).build();
+                    EasyExcel.readSheet(0).headRowNumber(2).head(SimpleData.class).registerReadListener(new PojoDataListener()).build();
             ReadSheet readSheet2 =
-                    EasyExcel.readSheet(1).headRowNumber(2).head(SimpleData.class).registerReadListener(new SimpleDataListener()).build();
+                    EasyExcel.readSheet(1).headRowNumber(2).head(SimpleData.class).registerReadListener(new PojoDataListener()).build();
             /**
              * ExcelReader read(ReadSheet... readSheet：读取 sheet 中的内容，将多个 readSheet 同时传入
              * ExcelReader read(List<ReadSheet> readSheetList)
