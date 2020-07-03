@@ -111,7 +111,7 @@ public class ExcelWriteTest {
     public void excludeOrIncludeWrite() {
         /**
          * excludeColumnFiledNames(Collection<String> excludeColumnFiledNames)：自定义想要忽略的列
-         * excludeColumnFiledNames(Collection<String> excludeColumnFiledNames)：只输出自定义的列
+         * includeColumnFiledNames(Collection<String> includeColumnFiledNames)：只输出自定义的列
          */
         Set<String> excludeColumnFiledNames = new HashSet<String>();
         //假设想要忽略 WriterDemoData 实体中的 id 属性不写入到 excel 文件中去.

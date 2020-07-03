@@ -13,13 +13,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * AnalysisEventListener：分析事件监听器
- * 1、它是一个抽象类，继承之后必须实现 invoke 方法，AnalysisEventListener 实现了 ReadListener 接口，
+ * AnalysisEventListener：分析事件监听器，AnalysisEventListener 抽象类实现了 ReadListener 接口，
+ * 1、它是一个抽象类，继承之后必须实现 invoke 方法，
  * 2、EasyExcel.read 读取 excel 文件的时候，需要传入 ReadListener 监听器
  * 3、读取监听器的目的在于能捕获读取到的每一条数据，这样可以轻松的对每一条数据进行处理，比如存库、清洗、验证、记录日志等
  * 4、特别注意：读取监听器不能交由 spring 容器管理，EasyExcel.read 时通过 new 对象，如果本类中需要用到哪个 bean，则可以通过构造器参数传入。
  * 比如需要将读取的数据存储到数据库，显然需要 XxxServer 或者 XxxDao，这些 bean 是交由 Spring 容器管理的，所以可以通过本来的构造器参数传入。
- * 5、这里定义为泛型，作为公共的读取监听器，方便任意类型的实体读取时都能调用
  *
  * @author wangMaoXiong
  * @version 1.0
