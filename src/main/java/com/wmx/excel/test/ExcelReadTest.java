@@ -55,7 +55,7 @@ public class ExcelReadTest {
          * <p></p>
          * headRowNumber(Integer headRowNumber)：设置 excel 文件的标题占用几行。
          * 1、如 0：表示没有标题，第一行就是数据；1：表示第一行是标题，第二行开始是数据；表示前两行是标题，第三行开始数据；依此类推。
-         * 2、headRowNumber 默认为 1，此时 headRowNumber(Integer headRowNumber) 可以不用指定.
+         * 2、headRowNumber 默认会根据 head（实体对象或者list指定的标题）自动判断.
          * <p></p>
          * void doRead() :正式读取文件数据，读取完成内部会调用 finish() 方法，关闭流，释放资源。
          * List<T> doReadSync()：同步读取，然后返回读取结果。对于数据量大时，不建议这么做，因为都会临时放入到缓存中。
