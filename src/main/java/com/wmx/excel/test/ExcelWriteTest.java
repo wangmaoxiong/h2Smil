@@ -230,13 +230,14 @@ public class ExcelWriteTest {
              * 4、WriteTable 会继承 WriteSheet与 的配置.
              */
             WriteSheet writeSheet = EasyExcel.writerSheet("模板").needHead(Boolean.FALSE).build();
-            //上面 WriteSheet 没有设置标题，这里 WriteTable 设置标题，效果就是一页中有两个表格，两个都有标题
+            //上面 WriteSheet 没有设置标题，这里 WriteTable 设置标题，效果就是一页中有两个表格，两个 WriteTable 都会有标题
+            //如果想要各个 WriteTable 使用不同的表头，则可以在 .needHead 后面使用 .head 方法进行指定.
             WriteTable writeTable0 = EasyExcel.writerTable(0).needHead(Boolean.TRUE).build();
             WriteTable writeTable1 = EasyExcel.writerTable(1).needHead(Boolean.TRUE).build();
             /**
              * write(List data, WriteSheet writeSheet, WriteTable writeTable)
              * 1、将数据 data 按表格（writeTable0 ）形式写入到 writeSheet 中
-             * 2、第二次的数据会写在第一次的后面（紧挨着）
+             * 2、第二次的数据会写在第一次的后面（紧挨着），而且每个 WriteTable 都会有表头
              */
             excelWriter.write(this.data(), writeSheet, writeTable0);
             excelWriter.write(this.data(), writeSheet, writeTable1);
@@ -257,6 +258,7 @@ public class ExcelWriteTest {
         ExcelWriter excelWriter = null;
         try {
             //1）先创建 ExcelWriter 写对象
+            /**如果每页的表头不一样，则可以参考下面的 {@link ExcelWriteTest#repeatedWrite3()} 设置方式*/
             excelWriter = EasyExcel.write(outputFilePath, WriterDemoData.class).build();
             //2）再创建 WriteSheet 页对象
             WriteSheet writeSheet = EasyExcel.writerSheet("模板10").build();
@@ -282,6 +284,7 @@ public class ExcelWriteTest {
     public void repeatedWrite2() {
         ExcelWriter excelWriter = null;
         try {
+            /**如果每页的表头不一样，则可以参考下面的 {@link ExcelWriteTest#repeatedWrite3()} 设置方式*/
             excelWriter = EasyExcel.write(outputFilePath, WriterDemoData.class).build();
             //1、假设每次数据量比较大，需要放在不同的页
             int count = 3;
@@ -375,8 +378,8 @@ public class ExcelWriteTest {
         List<List<String>> list = new ArrayList<>();
         list.add(Arrays.asList("VIP客户信息汇总表", "序号"));
         list.add(Arrays.asList("VIP客户信息汇总表", "名称"));
-        list.add(Arrays.asList("VIP客户信息汇总表", "数量"));
-        list.add(Arrays.asList("VIP客户信息汇总表", "单价"));
+        list.add(Arrays.asList("VIP客户信息汇总表", "数量(件)"));
+        list.add(Arrays.asList("VIP客户信息汇总表", "单价（元）"));
         list.add(Arrays.asList("VIP客户信息汇总表", "出货日期"));
         return list;
     }

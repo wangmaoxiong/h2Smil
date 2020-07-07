@@ -4,6 +4,7 @@ package com.wmx.excel.test.listener;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.exception.ExcelDataConvertException;
+import com.alibaba.excel.read.builder.AbstractExcelReaderParameterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +48,9 @@ public class MapDataListener extends AnalysisEventListener<Map<Integer, String>>
      */
     @Override
     public void invoke(Map<Integer, String> data, AnalysisContext context) {
-        LOGGER.info("读取数据为：{}", data);
+        //getRowIndex 获取的是当前读取到的数据所在的行数，注意是从 0 开始计数的
+        Integer rowIndex = context.readRowHolder().getRowIndex();
+        LOGGER.info("读取第 {} 行数据为：{}", rowIndex+1, data);
         dataList.add(data);
         // 达到批处理次数时，就存储一次数据库，防止成千上万条数据占用内存，出现 OOM
         if (dataList.size() >= BATCH_COUNT) {
@@ -55,6 +58,21 @@ public class MapDataListener extends AnalysisEventListener<Map<Integer, String>>
             // 存储完成后清空列表
             dataList.clear();
         }
+    }
+
+    /**
+     * 每解析完成一行表头调用一次本方法
+     * 1、因为读取的时候会使用 {@link AbstractExcelReaderParameterBuilder#headRowNumber(java.lang.Integer) 设置表头行数
+     * 2、所以会先逐行解析表头，然后逐行读取正文，回调上面的 invoke 方法
+     *
+     * @param headMap
+     * @param context
+     */
+    @Override
+    public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
+        //getRowIndex 获取的是当前读取到的数据所在的行数，注意是从 0 开始计数的
+        Integer rowIndex = context.readRowHolder().getRowIndex();
+        LOGGER.info("解析到第 {} 行的头数据:{}", rowIndex + 1, headMap);
     }
 
     /**
@@ -81,11 +99,16 @@ public class MapDataListener extends AnalysisEventListener<Map<Integer, String>>
      */
     @Override
     public void onException(Exception exception, AnalysisContext context) {
+        /**
+         * excelDataConvertException.getRowIndex：获取当前异常数据单元格所在的行数，注意从 0 开始计数
+         * excelDataConvertException.getColumnIndex：获取当前异常数据单元格所在的列数，注意从 0 开始计数
+         * excelDataConvertException.getCellData()：获取当前异常数据单元格的值
+         */
         LOGGER.error("解析失败，继续下一行:{}", exception.getMessage());
         if (exception instanceof ExcelDataConvertException) {
             ExcelDataConvertException excelDataConvertException = (ExcelDataConvertException) exception;
-            LOGGER.error("第 {} 行 {} 列解析异常，数据为:{}", excelDataConvertException.getRowIndex(),
-                    excelDataConvertException.getColumnIndex(), excelDataConvertException.getCellData());
+            LOGGER.error("第 {} 行 {} 列解析异常，数据为:{}", excelDataConvertException.getRowIndex() + 1,
+                    excelDataConvertException.getColumnIndex() + 1, excelDataConvertException.getCellData());
         }
     }
 

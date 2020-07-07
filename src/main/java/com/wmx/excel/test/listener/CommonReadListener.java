@@ -48,7 +48,9 @@ public class CommonReadListener<T> extends AnalysisEventListener<T> {
      */
     @Override
     public void invoke(T data, AnalysisContext context) {
-        LOGGER.info("解析到条数据: {}", data);
+        //getRowIndex 获取的是当前读取到的数据所在的行数，注意是从 0 开始计数的
+        Integer rowIndex = context.readRowHolder().getRowIndex();
+        LOGGER.info("解析到第 {} 行数据: {}", rowIndex + 1, data);
         dataList.add(data);
         if (dataList.size() >= BATCH_COUNT) {
             saveData();
@@ -66,7 +68,9 @@ public class CommonReadListener<T> extends AnalysisEventListener<T> {
      */
     @Override
     public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
-        LOGGER.info("解析到一条头数据:{}", headMap);
+        //getRowIndex 获取的是当前读取到的数据所在的行数，注意是从 0 开始计数的
+        Integer rowIndex = context.readRowHolder().getRowIndex();
+        LOGGER.info("解析到第 {} 行的头数据:{}", rowIndex + 1, headMap);
     }
 
     /**
@@ -91,11 +95,16 @@ public class CommonReadListener<T> extends AnalysisEventListener<T> {
      */
     @Override
     public void onException(Exception exception, AnalysisContext context) {
+        /**
+         * excelDataConvertException.getRowIndex：获取当前异常数据单元格所在的行数，注意从 0 开始计数
+         * excelDataConvertException.getColumnIndex：获取当前异常数据单元格所在的列数，注意从 0 开始计数
+         * excelDataConvertException.getCellData()：获取当前异常数据单元格的值
+         */
         LOGGER.error("解析失败，继续解析下一行:{}", exception.getMessage());
         if (exception instanceof ExcelDataConvertException) {
             ExcelDataConvertException excelDataConvertException = (ExcelDataConvertException) exception;
-            LOGGER.error("第 {} 行 {} 列解析异常，数据为:{}", excelDataConvertException.getRowIndex(),
-                    excelDataConvertException.getColumnIndex(), excelDataConvertException.getCellData());
+            LOGGER.error("第 {} 行 {} 列解析异常，数据为:{}", excelDataConvertException.getRowIndex() + 1,
+                    excelDataConvertException.getColumnIndex() + 1, excelDataConvertException.getCellData());
         }
     }
 

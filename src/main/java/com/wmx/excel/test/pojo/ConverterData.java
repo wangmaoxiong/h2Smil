@@ -30,16 +30,17 @@ import java.util.Date;
  */
 public class ConverterData {
     /**
-     * @ExcelProperty value 属性指定 excel 中的标题，假如 excel 实际是二级标题，value 属性确只指定了二级标题，也是可以的,读取数据仍然可以读取成功。
+     * @ExcelProperty value 属性指定 excel 中的标题，假如 excel 实际是二级标题，value 属性却只指定了二级标题，也是可以的,读取数据仍然可以读取成功，
+     * 但是读取操作记行数的时候会记错，因为它认为标题只有一行，所以强烈建议，实体属性的标题与 excel 文件要一致.
      */
-    @ExcelProperty(value = "用户名", converter = CustomStringStringConverter.class)
+    @ExcelProperty(value = {"客户信息表", "用户名"}, converter = CustomStringStringConverter.class)
     private String name;
 
-    @ExcelProperty(value = "生日")
+    @ExcelProperty(value = {"客户信息表", "生日"})
     @DateTimeFormat("yyyy年MM月dd日 HH时mm分ss秒")
     private Date birthday;
 
-    @ExcelProperty(value = "回购率")
+    @ExcelProperty(value = {"客户信息表", "回购率"})
     @NumberFormat("#.##%")
     private Float repurchasing;
 
