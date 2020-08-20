@@ -8,6 +8,7 @@ import com.alibaba.excel.write.metadata.WriteTable;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
+import com.wmx.excel.test.converter.CustomCellWriteHandler;
 import com.wmx.excel.test.pojo.ConverterData;
 import com.wmx.excel.test.pojo.WriterDemoData;
 import com.wmx.excel.test.pojo.WriterImageData;
@@ -203,7 +204,8 @@ public class ExcelWriteTest {
      */
     @Test
     public void noModelWrite() {
-        EasyExcel.write(outputFilePath).registerWriteHandler(handlerStyleWrite()).head(variableTitleHead()).sheet("模板8").doWrite(dataList());
+        EasyExcel.write(outputFilePath).registerWriteHandler(handlerStyleWrite())
+                .head(variableTitleHead()).sheet("模板8").doWrite(dataList());
     }
 
     /**
@@ -212,6 +214,17 @@ public class ExcelWriteTest {
     @Test
     public void noModelWrite2() {
         EasyExcel.write(outputFilePath).sheet("模板8").doWrite(dataList());
+    }
+
+
+    /**
+     * 不创建对象的写入 excel，使用自定义 列宽样式策略 设置列宽，否则默认列宽是固定的，很容易遮住内容
+     * 1、可以反复多次 registerWriteHandler 设置写处理器
+     */
+    @Test
+    public void noModelWrite3() {
+        EasyExcel.write(outputFilePath).registerWriteHandler(new CustomCellWriteHandler())
+                .head(variableTitleHead()).sheet("模板8").doWrite(dataList());
     }
 
     /**
