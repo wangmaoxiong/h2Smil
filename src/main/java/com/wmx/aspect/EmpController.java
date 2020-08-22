@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -29,9 +30,18 @@ public class EmpController {
      */
     @GetMapping(value = "emp/findEmpById")
     public Map<String, Object> findEmpById(@RequestParam Integer empId) {
-        System.out.println("进入员工控制层【" + empId + "】");
-        Map<String, Object> emp = empServiceImpl.findEmpById(empId);
-        return emp;
+        Map<String, Object> resultData = new HashMap<>();
+        try {
+            System.out.println("进入员工控制层【" + empId + "】");
+            Map<String, Object> emp = empServiceImpl.findEmpById(empId);
+            resultData.put("code", 200);
+            resultData.put("data", emp);
+        } catch (Exception e) {
+            resultData.put("code", 500);
+            resultData.put("msg", e.getMessage());
+            e.printStackTrace();
+        }
+        return resultData;
     }
 
     /**

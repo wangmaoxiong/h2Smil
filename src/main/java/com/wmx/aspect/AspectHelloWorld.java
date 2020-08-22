@@ -41,6 +41,7 @@ public class AspectHelloWorld {
 
     /**
      * 前置通知：目标方法执行之前执行以下方法体的内容。
+     * 如果在其中抛出异常，则目标方法不会再执行，会执行后置通知 -> 异常通知。
      * value：绑定通知的切入点表达式。可以关联切入点声明，也可以直接设置切入点表达式
      * <br/>
      *
@@ -76,6 +77,11 @@ public class AspectHelloWorld {
         System.out.println("\tsourceLocation=" + sourceLocation);
         System.out.println("\tlongString=" + longString);
         System.out.println("\tshortString=" + shortString);
+
+        // 模拟参数校验未通过，抛出异常，此时目标方法不会再执行
+        if(args !=null && args[0].equals(100)){
+            throw new RuntimeException("参数校验失败！");
+        }
     }
 
     /**
