@@ -36,6 +36,7 @@ public class EmpServiceImpl {
             int nextInt = new Random().nextInt(3000);
             TimeUnit.MILLISECONDS.sleep(nextInt + 200);
         } catch (InterruptedException e) {
+            //比如这个线程中断异常在这里捕获之后，则切面的 @AfterThrowing 异常通知就不会在调用.
             e.printStackTrace();
         }
         return empMap;
@@ -54,6 +55,7 @@ public class EmpServiceImpl {
             int nextInt = new Random().nextInt(3000);
             TimeUnit.MILLISECONDS.sleep(nextInt + 200);
         } catch (InterruptedException e) {
+            //比如这个线程中断异常在这里捕获之后，则切面的 @AfterThrowing 异常通知就不会在调用.
             e.printStackTrace();
         }
     }
