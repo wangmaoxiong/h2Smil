@@ -79,7 +79,7 @@ public class AspectHelloWorld {
         System.out.println("\tshortString=" + shortString);
 
         // 模拟参数校验未通过，抛出异常，此时目标方法不会再执行
-        if(args !=null && args[0].equals(100)){
+        if (args != null && args[0].equals(100)) {
             throw new RuntimeException("参数校验失败！");
         }
     }
@@ -111,6 +111,7 @@ public class AspectHelloWorld {
 
     /**
      * 异常通知：目标方法发生异常的时候执行以下代码，此时返回通知不会再触发
+     * 注意：如果目标方法自己 try-catch 了异常，而没有继续往外抛，则不会进入此回调函数
      * value 属性：绑定通知的切入点表达式。可以关联切入点声明，也可以直接设置切入点表达式
      * pointcut 属性：绑定通知的切入点表达式，优先级高于 value，默认为 ""
      * throwing 属性：与方法中的异常参数名称一致，

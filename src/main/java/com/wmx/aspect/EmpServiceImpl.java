@@ -25,14 +25,13 @@ public class EmpServiceImpl {
      * @return
      */
     public Map<String, Object> findEmpById(Integer empId) {
-        System.out.println("根据员工id查询员工数据【" + empId + "】");
         Map<String, Object> empMap = new HashMap<>(8);
-        empMap.put("id", empId);
-        empMap.put("name", "张无忌");
-        empMap.put("age", 33);
-        empMap.put("birthday", new Date());
-
         try {
+            System.out.println("根据员工id查询员工数据【" + empId + "】");
+            empMap.put("id", empId);
+            empMap.put("name", "张无忌");
+            empMap.put("age", 33);
+            empMap.put("birthday", new Date());
             // 模拟方法执行耗时
             int nextInt = new Random().nextInt(3000);
             TimeUnit.MILLISECONDS.sleep(nextInt + 200);
@@ -48,10 +47,9 @@ public class EmpServiceImpl {
      * @param empId
      */
     public void deleteById(Integer empId) {
-        System.out.println(1 / empId);
-        System.out.println("根据员工id删除员工数据【" + empId + "】");
-
         try {
+            System.out.println("根据员工id删除员工数据【" + empId + "】");
+            System.out.println(1 / empId);
             // 模拟方法执行耗时
             int nextInt = new Random().nextInt(3000);
             TimeUnit.MILLISECONDS.sleep(nextInt + 200);
