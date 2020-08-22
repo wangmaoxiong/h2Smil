@@ -11,14 +11,16 @@ import java.util.Arrays;
 
 /**
  * 切面注解 Aspect 使用入门
- * 1、Order 的数值越小，切面执行顺序越靠前
+ * 1、@Aspect：声明本类为切面类
+ * 2、@Component：将本类交由 Spring 容器管理
+ * 3、@Order：指定切入执行顺序，数值越小，切面执行顺序越靠前，默认为 Integer.MAX_VALUE
  *
  * @author wangMaoXiong
  * @version 1.0
  * @date 2020/8/20 19:22
  */
 @Aspect
-@Order(value = 1)
+@Order(value = 999)
 @Component
 public class AspectHelloWorld {
 
