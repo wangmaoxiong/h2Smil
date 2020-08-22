@@ -52,10 +52,19 @@ public class EmpController {
      * @return
      */
     @GetMapping(value = "emp/deleteById")
-    public String deleteById(@RequestParam Integer empId) {
-        System.out.println("进入员工控制层【" + empId + "】");
-        empServiceImpl.deleteById(empId);
-        return "Success";
+    public Map<String, Object> deleteById(@RequestParam Integer empId) {
+        Map<String, Object> resultData = new HashMap<>();
+        try {
+            System.out.println("进入员工控制层【" + empId + "】");
+            empServiceImpl.deleteById(empId);
+            resultData.put("code", 200);
+            resultData.put("msg", "success");
+        } catch (Exception e) {
+            resultData.put("code", 500);
+            resultData.put("msg", e.getMessage());
+            e.printStackTrace();
+        }
+        return resultData;
     }
 
 }
