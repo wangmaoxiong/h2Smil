@@ -46,6 +46,9 @@ public class EmpController {
 
     /**
      * ExceptionHandler：异常处理注解，只有一个 value 属性，用于捕获特定的异常类型，为空时表示捕获所有异常
+     * ExceptionHandler 异常处理方法的返回值是页面跳转还是直接返回给页面，取决于所在的类使用的是 Controller 注解还是 RestController 注解，
+     * Controller 时 ExceptionHandler 方法的返回值默认是页面跳转（除非 ExceptionHandler 方法再加上 @ResponseBody 注解，此时就会直接返回给页面）；
+     * RestController 时 @ExceptionHandler 方法返回值默认是直接返回给页面。
      *
      * @param ex ：目标方法实际抛出的异常对象
      * @return ：原 @RequestMapping 方法的返回值不会再走，而是会使用 @ExceptionHandler 方法的返回值，
@@ -67,6 +70,9 @@ public class EmpController {
 
     /**
      * ExceptionHandler：异常处理注解，只有一个 value 属性，用于捕获特定的异常类型，为空时表示捕获所有异常
+     * ExceptionHandler 异常处理方法的返回值是页面跳转还是直接返回给页面，取决于所在的类使用的是 Controller 注解还是 RestController 注解，
+     * Controller 时 ExceptionHandler 方法的返回值默认是页面跳转（除非 ExceptionHandler 方法再加上 @ResponseBody 注解，此时就会直接返回给页面）；
+     * RestController 时 @ExceptionHandler 方法返回值默认是直接返回给页面。
      *
      * @param ex ：目标方法实际抛出的异常对象
      * @return ：原 @RequestMapping 方法的返回值不会再走，而是会使用 @ExceptionHandler 方法的返回值，
