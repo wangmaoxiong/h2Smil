@@ -35,7 +35,7 @@ public class EmpServiceImpl {
     public Map<String, Object> findEmpById(Integer empId) {
         try {
             System.out.println("根据员工id查询员工数据【" + empId + "】");
-            empMap.put("empIdd", empId);
+            empMap.put("empId", empId);
             // 模拟方法执行耗时（毫秒）
             int nextInt = new Random().nextInt(2000);
             TimeUnit.MILLISECONDS.sleep(nextInt);
