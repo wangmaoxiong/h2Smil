@@ -57,3 +57,14 @@ author:
     address: 长沙市天心区
     # Jasypt加密，格式为ENC(加密结果)
     email: 114
+
+
+#自定义的系统配置信息
+app:
+  basic:
+    app-author: 汪茂雄
+    app-version: v2.0
+    launchDate: 2020/09/05
+    app-info: v2.0版本发布
+
+
