@@ -3,6 +3,7 @@ package com.wmx.service.impl;
 import com.wmx.entity.Tv;
 import com.wmx.repository.TvRepository;
 import com.wmx.service.TvService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -25,14 +26,24 @@ public class TvServiceImpl implements TvService {
     @Resource
     private TvRepository tvRepository;
 
+    /**
+     * Cacheable ：对结果进行缓存
+     * cacheNames : 缓存的名称，用于确定目标缓存.
+     *
+     * @return
+     */
     @Override
+    @Cacheable(cacheNames = "com.wmx.service.impl.TvServiceImpl.findAll")
     public List<Tv> findAll() {
         //org.springframework.data.jpa.repository.JpaRepository.findAll():没有数据时，返回空列表，不会为null
+        System.out.println("查询所有数据.");
         return tvRepository.findAll();
     }
 
     @Override
+    @Cacheable(cacheNames = "com.wmx.service.impl.TvServiceImpl.findAllById")
     public List<Tv> findAllById(List<Integer> ids) {
+        System.out.println("根据 id列表 查询数据.");
         return tvRepository.findAllById(ids);
     }
 
