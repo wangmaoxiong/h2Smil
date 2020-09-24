@@ -47,7 +47,7 @@ public class TvController {
      */
     @GetMapping("tv/findAllByIds")
     @ResponseBody
-    public String findAllByIds(String ids) {
+    public List<Tv> findAllByIds(String ids) {
         List<String> idList = new ArrayList<>();
         if (ids != null && !"".equals(ids)) {
             idList = Arrays.asList(ids.split(","));
@@ -56,7 +56,7 @@ public class TvController {
         for (String s : idList) {
             idListInt.add(Integer.parseInt(s));
         }
-        return tvService.findAllById(idListInt).toString();
+        return tvService.findAllById(idListInt);
     }
 
     /**
@@ -65,14 +65,11 @@ public class TvController {
      */
     @GetMapping("tv/findById")
     @ResponseBody
-    public String findById(Integer id) {
+    public Tv findById(Integer id) {
         logger.info("根据Id进行检索...");
         id = id == null ? -1 : id;
         Tv tv = tvService.findById(id);
-        if (tv == null) {
-            return "数据不存在";
-        }
-        return tv.toString();
+        return tv;
     }
 
     /**
@@ -84,15 +81,12 @@ public class TvController {
      */
     @GetMapping("tv/findOne")
     @ResponseBody
-    public String findOne(String name) {
+    public Tv findOne(String name) {
         //以实体非null的字段进行调节查询
         Tv tv = new Tv();
         tv.setTvName(name);
         tv = tvService.findOne(tv);
-        if (tv != null) {
-            return tv.toString();
-        }
-        return "";
+        return tv;
     }
 
     /**
@@ -103,8 +97,8 @@ public class TvController {
      */
     @GetMapping("tv/findAllSort")
     @ResponseBody
-    public String findAllSort() {
-        return tvService.findAllSort().toString();
+    public List<Tv> findAllSort() {
+        return tvService.findAllSort();
     }
 
     /**
@@ -117,7 +111,7 @@ public class TvController {
      */
     @GetMapping("tv/findPageable")
     @ResponseBody
-    public String findPageable(Integer page, Integer size) {
+    public List<Tv> findPageable(Integer page, Integer size) {
         page = page == null ? 1 : page;
         size = size == null ? 2 : size;
         Page<Tv> tvPage = tvService.findPageable(page, size);
@@ -127,7 +121,7 @@ public class TvController {
         logger.info("总页数：" + tvPage.getTotalPages());
         //无数据时，返回空列表
         List<Tv> tvList = tvPage.getContent();
-        return tvList.toString();
+        return tvList;
     }
 
     /**
@@ -138,13 +132,10 @@ public class TvController {
      */
     @GetMapping("tv/getOneById")
     @ResponseBody
-    public String getOneById(String id) {
+    public Tv getOneById(String id) {
         Integer idInt = id == null ? 0 : Integer.parseInt(id);
         Tv tv = tvService.getOneById(idInt);
-        if (tv != null) {
-            return tv.toString();
-        }
-        return "";
+        return tv;
     }
 
     /**
@@ -156,11 +147,11 @@ public class TvController {
      */
     @GetMapping("tv/findAllExample")
     @ResponseBody
-    public String findAllExample(String name) {
+    public List<Tv> findAllExample(String name) {
         //可以指定实体任意非null字段作为条件进行查询
         Tv tv = new Tv();
         tv.setTvName(name);
-        return tvService.findAllExample(tv).toString();
+        return tvService.findAllExample(tv);
     }
 
     /**
@@ -172,14 +163,14 @@ public class TvController {
      */
     @GetMapping("tv/findAllExample2")
     @ResponseBody
-    public String findAllExample2(String name) {
+    public List<Tv> findAllExample2(String name) {
         //可以指定实体任意非null字段作为条件进行查询
         Tv tv = new Tv();
         tv.setTvName(name);
 
         //以 tvId 倒序查询，当 tvId 相同时，使用 tvPrice 升序
         Sort sort = Sort.by(Sort.Order.desc("tvId"), Sort.Order.asc("tvPrice"));
-        return tvService.findAll(tv, sort).toString();
+        return tvService.findAll(tv, sort);
     }
 
     /**
@@ -325,11 +316,11 @@ public class TvController {
      */
     @GetMapping("tv/findAll1")
     @ResponseBody
-    public String findAll1(String name) throws ParseException {
+    public List<Tv> findAll1(String name) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date start = dateFormat.parse("2019-04-27 10:00:00");
         Date end = dateFormat.parse("2019-04-27 23:00:00");
-        return tvService.findAll(start, end, name).toString();
+        return tvService.findAll(start, end, name);
     }
 
     /**
@@ -342,7 +333,7 @@ public class TvController {
      */
     @GetMapping("tv/findAll2")
     @ResponseBody
-    public String findAll2(Integer page, Integer size) throws ParseException {
+    public List<Tv> findAll2(Integer page, Integer size) throws ParseException {
         page = page == null ? 1 : page;
         size = size == null ? 2 : size;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -353,7 +344,7 @@ public class TvController {
         logger.info("总记录数：" + tvPage.getTotalElements());
         logger.info("总页数：" + tvPage.getTotalPages());
         List<Tv> tvList = tvPage.getContent();
-        return tvList.toString();
+        return tvList;
     }
 
     /**
@@ -365,8 +356,8 @@ public class TvController {
      */
     @GetMapping("tv/findAll3")
     @ResponseBody
-    public String findAll3(String like) {
-        return tvService.findAllLike(like).toString();
+    public List<Tv> findAll3(String like) {
+        return tvService.findAllLike(like);
     }
 
     /**
@@ -379,7 +370,7 @@ public class TvController {
      */
     @GetMapping("tv/findAll4")
     @ResponseBody
-    public String findAll4(Integer page, Integer size, String name) {
+    public List<Tv> findAll4(Integer page, Integer size, String name) {
         //根据实体中非null字段进行条件查询。都为null是默认查询所有
         Tv tv = new Tv();
         tv.setTvName(name);
@@ -392,6 +383,6 @@ public class TvController {
         logger.info("总页数：" + tvPage.getTotalPages());
         //无数据时，返回空列表
         List<Tv> tvList = tvPage.getContent();
-        return tvList.toString();
+        return tvList;
     }
 }
