@@ -39,7 +39,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/findAllByIds
+     * http://localhost:8080/tv/findAllByIds?ids=1,2,3,4,5
      * 根据 id 列表同时查询多条数据
      *
      * @param ids ：格式 1,2,33,45
@@ -60,7 +60,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/findById
+     * http://localhost:8080/tv/findById?id=2
      * 根据id查询
      */
     @GetMapping("tv/findById")
@@ -73,7 +73,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/findOne
+     * http://localhost:8080/tv/findOne?name=59607b1a-4d5a-4b69-8409-b8fd80611839
      * 条件查询单条数据
      *
      * @param name
@@ -102,7 +102,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/findPageable
+     * http://localhost:8080/tv/findPageable?page=1&size=50
      * 分页查询
      *
      * @param page ：查询的页码，从1开始
@@ -139,7 +139,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/findAllExample
+     * http://localhost:8080/tv/findAllExample?name=2dc98f41-8efd-49bf-ae7b-bf9af31d3bf0
      * 条件查询
      *
      * @param name
