@@ -15,6 +15,8 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * ElasticsearchTemplate 全文检索
+ *
  * @author wangmaoxiong
  * @version 1.0
  * @date 2020/6/4 16:58
