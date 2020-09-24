@@ -44,13 +44,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!--ehcache 缓存-->
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>3.8.1</version>
-        </dependency>
-
         <!--jasypt 加解密组件-->
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
