@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Validated 配置属性校验
+ *
  * @author wangMaoXiong
  * @version 1.0
  * @date 2020/9/5 16:36
