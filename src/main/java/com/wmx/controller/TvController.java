@@ -126,6 +126,7 @@ public class TvController {
 
     /**
      * http://localhost:8080/tv/getOneById
+     * 根据主键 ID 查询
      *
      * @param id
      * @return
@@ -140,7 +141,7 @@ public class TvController {
 
     /**
      * http://localhost:8080/tv/findAllExample?name=2dc98f41-8efd-49bf-ae7b-bf9af31d3bf0
-     * 条件查询
+     * 条件查询多条数据
      *
      * @param name
      * @return
@@ -156,7 +157,7 @@ public class TvController {
 
     /**
      * http://localhost:8080/tv/findAllExample2
-     * 条件查询
+     * 条件查询，指定排序字段
      *
      * @param name
      * @return
@@ -225,7 +226,7 @@ public class TvController {
 
     /**
      * http://localhost:8080/tv/deleteById
-     * 删除操作
+     * 根据主键删除，或者删除所有
      *
      * @param id
      * @return
@@ -258,6 +259,7 @@ public class TvController {
 
     /**
      * http://localhost:8080/tv/deleteAllByIds
+     * 删除多条
      *
      * @param ids
      * @return
@@ -309,6 +311,7 @@ public class TvController {
 
     /**
      * http://localhost:8080/tv/findAll1
+     * 条件查询时间范围在 [start,end] 之间的数据。如果 tvName 不为空，加上名称条件
      *
      * @param name
      * @return
@@ -325,6 +328,7 @@ public class TvController {
 
     /**
      * http://localhost:8080/tv/findAll2
+     * 查询生产日期大于等于 start 的数据，且进行分页查询
      *
      * @param page
      * @param size
@@ -349,6 +353,7 @@ public class TvController {
 
     /**
      * http://localhost:8080/tv/findAll3
+     * 模糊查询 like
      *
      * @param like
      * @return
@@ -362,6 +367,7 @@ public class TvController {
 
     /**
      * http://localhost:8080/tv/findAll4
+     * 条件查询，加分页。同时指定以 tvId 倒序排序
      *
      * @param page
      * @param size

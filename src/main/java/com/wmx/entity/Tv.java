@@ -9,7 +9,8 @@ import java.util.Date;
 /**
  * @author wangmaoxiong
  * Created by Administrator on 2019/2/27 0027.
- * 电视机实体。应用启动时自动，配置文件中配置 ddl-auto: update：如果数据库不存在，则自动新建，否则不再新建。
+ * 1、电视机实体。应用启动时自动，配置文件中配置 ddl-auto: update：如果数据库不存在，则自动新建，否则不再新建。
+ * 2、javax.persistence.Entity、javax.persistence.Id 注解必须要写，否则启动报错！
  */
 @Entity
 public class Tv {

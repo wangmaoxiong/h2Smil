@@ -20,10 +20,17 @@
 
     <dependencies>
 
-        <!--JPA 内部依赖  jdbc -->
+        <!-- Spring Data JPA 内部依赖会 jdbc -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!--h2 内存数据库，不用安装即可使用的数据库-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <!--thymeleaf 模板引擎-->
@@ -35,13 +42,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!--h2 内存数据库-->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
         </dependency>
 
         <!--jasypt 加解密组件-->
