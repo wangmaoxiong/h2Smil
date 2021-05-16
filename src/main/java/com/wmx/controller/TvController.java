@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 /**
- * h2 数据库 CRUD
+ * h2 数据库 Spring Data JPA CRUD
  *
  * @author wangmaoxiong
  * Created by Administrator on 2019/4/27.
@@ -125,7 +125,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/getOneById
+     * http://localhost:8080/tv/getOneById?id=110
      * 根据主键 ID 查询
      *
      * @param id
@@ -156,7 +156,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/findAllExample2
+     * http://localhost:8080/tv/findAllExample2?name=哇哈哈
      * 条件查询，指定排序字段
      *
      * @param name
@@ -204,7 +204,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/saveAll
+         * http://localhost:8080/tv/saveAll
      * 添加或者更新多个
      *
      * @return
@@ -225,7 +225,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/deleteById
+     * http://localhost:8080/tv/deleteById?id=4
      * 根据主键删除，或者删除所有
      *
      * @param id
@@ -242,7 +242,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/delete
+     * http://localhost:8080/tv/delete?id=5
      * 根据 id 删除
      *
      * @param id
@@ -258,7 +258,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/deleteAllByIds
+     * http://localhost:8080/tv/deleteAllByIds?ids=1,2,4
      * 删除多条
      *
      * @param ids
@@ -278,7 +278,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/deleteBatch
+     * http://localhost:8080/tv/deleteBatch?ids=1,2,4
      * 批量删除多条数据
      *
      * @param ids
@@ -310,7 +310,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/findAll1
+     * http://localhost:8080/tv/findAll1?name=5b727779-3191-46d3-a44f-cca7491a396c
      * 条件查询时间范围在 [start,end] 之间的数据。如果 tvName 不为空，加上名称条件
      *
      * @param name
@@ -322,7 +322,7 @@ public class TvController {
     public List<Tv> findAll1(String name) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date start = dateFormat.parse("2019-04-27 10:00:00");
-        Date end = dateFormat.parse("2019-04-27 23:00:00");
+        Date end = dateFormat.parse("2029-04-27 23:00:00");
         return tvService.findAll(start, end, name);
     }
 
@@ -352,7 +352,7 @@ public class TvController {
     }
 
     /**
-     * http://localhost:8080/tv/findAll3
+     * http://localhost:8080/tv/findAll3?like=8d157
      * 模糊查询 like
      *
      * @param like
@@ -371,12 +371,12 @@ public class TvController {
      *
      * @param page
      * @param size
-     * @param name
+     * @param name ：为空时，相当于不加条件
      * @return
      */
     @GetMapping("tv/findAll4")
     @ResponseBody
-    public List<Tv> findAll4(Integer page, Integer size, String name) {
+    public Page<Tv> findAll4(Integer page, Integer size, String name) {
         //根据实体中非null字段进行条件查询。都为null是默认查询所有
         Tv tv = new Tv();
         tv.setTvName(name);
@@ -389,6 +389,6 @@ public class TvController {
         logger.info("总页数：" + tvPage.getTotalPages());
         //无数据时，返回空列表
         List<Tv> tvList = tvPage.getContent();
-        return tvList;
+        return tvPage;
     }
 }
